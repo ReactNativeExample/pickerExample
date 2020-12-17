@@ -306,7 +306,7 @@ export default class App extends Component {
   };
 
   handleLaunchCamera = async () => {
-    await this.requestPermission();
+    //await this.requestPermission();
     SYImagePicker.openCamera(
         {isCrop: true, showCropCircle: true, showCropFrame: false},
         (err, photos) => {
