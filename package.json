@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "react": "16.13.1",
-    "react-native": "0.63.4"
+    "react-native": "0.63.4",
+    "react-native-customized-image-picker": "^0.2.1",
+    "react-native-syan-image-picker": "^0.4.10",
+    "react-native-video": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
