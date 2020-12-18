@@ -6,8 +6,6 @@ import {
 
 import Video from 'react-native-video';
 
-import SYImagePicker from 'react-native-syan-image-picker';
-
 
 import ImagePicker from 'react-native-customized-image-picker';
 
@@ -222,12 +220,6 @@ export default class App extends Component {
         <TouchableOpacity onPress={this.handleOpenImagePicker.bind(this)} style={styles.button}>
           <Text style={styles.text}>开启压缩</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.handleAsyncSelectPhoto.bind(this)} style={styles.button}>
-          <Text style={styles.text}>关闭压缩</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.handlePromiseSelectPhoto.bind(this)} style={styles.button}>
-          <Text style={styles.text}>选择照片(Promise)带base64</Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={this.handleDeleteCache.bind(this)} style={styles.button}>
           <Text style={styles.text}>缓存清除</Text>
         </TouchableOpacity>
@@ -241,15 +233,14 @@ export default class App extends Component {
 
   handleOpenImagePicker = () => {
 
-    SYImagePicker.openPicker({
+    ImagePicker.openPicker({
       maxSize:1,
-
       isRecordSelected: true,
-      isCrop: true,
+      cropping: true,
       showCropCircle: true,
-      quality: 90,
+      compressQuality: 90,
       compress: true,
-      enableBase64: false,
+      includeBase64: false,
     }).then(images => {
       this.setState({
         images: images.map(i => {
@@ -263,83 +254,40 @@ export default class App extends Component {
     });
   };
 
-  /**
-   * 使用方式sync/await
-   * 相册参数暂时只支持默认参数中罗列的属性；
-   * @returns {Promise<void>}
-   */
-  handleAsyncSelectPhoto = async () => {
-    // SYImagePicker.removeAllPhoto()
-    try {
-      const photos = await SYImagePicker.asyncShowImagePicker({
-        // allowPickingOriginalPhoto: true,
-        imageCount: 1,
-        isGif: true,
-        enableBase64: true,
-      });
-      console.log('关闭', photos);
-      // 选择成功
-      this.setState({
-        photos: [...this.state.photos, ...photos],
-      });
-    } catch (err) {
-      console.log(err);
-      // 取消选择，err.message为"取消"
-    }
-  };
-
-  handlePromiseSelectPhoto = () => {
-    SYImagePicker.asyncShowImagePicker({imageCount: 3})
-        .then(photos => {
-          console.log(photos);
-          const arr = photos.map(v => {
-            return v;
-          });
-          // 选择成功
-          this.setState({
-            photos: [...this.state.photos, ...arr],
-          });
-        })
-        .catch(err => {
-          // 取消选择，err.message为"取消"
-        });
-  };
 
   handleLaunchCamera = async () => {
     //await this.requestPermission();
-    SYImagePicker.openCamera(
-        {isCrop: true, showCropCircle: true, showCropFrame: false},
-        (err, photos) => {
-          console.log(err, photos);
-          if (!err) {
-            this.setState({
-              photos: [...this.state.photos, ...photos],
-            });
-          }
-        },
-    );
+    ImagePicker.openCamera({isCrop: true, showCropCircle: true, showCropFrame: false})
+        .then(images => {
+          this.setState({
+            images: images.map(i => {
+              console.log('received image', i);
+              return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
+            }),
+          });
+        }).catch(e => {
+      console.log(e.code);
+      alert(e);
+    });
   };
 
   handleDeleteCache = () => {
-    SYImagePicker.deleteCache();
+    ImagePicker.deleteCache();
   };
 
   handleOpenVideoPicker = () => {
-    SYImagePicker.openVideoPicker(
-        {allowPickingMultipleVideo: true},
-        (err, res) => {
-          console.log(err, res);
-          if (!err) {
-            let photos = [...this.state.photos];
-            res.map(v => {
-              photos.push({...v, uri: v.coverUri});
-            });
-            this.setState({
-              photos,
-            });
-          }
-        },
-    );
+    ImagePicker.openVideoPicker({allowPickingMultipleVideo: true})
+        .then(images => {
+          this.setState({
+            images: images.map(i => {
+              console.log('received image', i);
+              return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
+            }),
+          });
+        }).catch(e => {
+      console.log(e.code);
+      alert(e);
+    });
   };
 
 }
