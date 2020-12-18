@@ -240,27 +240,27 @@ export default class App extends Component {
 
 
   handleOpenImagePicker = () => {
-    SYImagePicker.showImagePicker(
-        {
-          imageCount: 1,
-          isRecordSelected: true,
-          isCrop: true,
-          showCropCircle: true,
-          quality: 90,
-          compress: true,
-          enableBase64: false,
-        },
-        (err, photos) => {
-          console.log('开启', err, photos);
-          if (!err) {
-            this.setState({
-              photos,
-            });
-          } else {
-            console.log(err);
-          }
-        },
-    );
+
+    SYImagePicker.openPicker({
+      maxSize:1,
+
+      isRecordSelected: true,
+      isCrop: true,
+      showCropCircle: true,
+      quality: 90,
+      compress: true,
+      enableBase64: false,
+    }).then(images => {
+      this.setState({
+        images: images.map(i => {
+          console.log('received image', i);
+          return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
+        }),
+      });
+    }).catch(e => {
+      console.log(e.code);
+      alert(e);
+    });
   };
 
   /**
