@@ -55,6 +55,7 @@ export default class App extends Component {
     ImagePicker.openPicker({
       width: 300,
       height: 300,
+      maxSize:1,
       cropping: cropit,
       isSelectBoth: true,
       isCamera: true,
@@ -77,6 +78,8 @@ export default class App extends Component {
       height: 300,
       isVideo: true,
       isCamera: true,
+      allowPickingVideo:true,
+      allowTakeVideo:true,
       cropping: cropit,
     }).then(images => {
       this.setState({
@@ -213,81 +216,8 @@ export default class App extends Component {
         <Text style={styles.text}>Select Multiple</Text>
       </TouchableOpacity>
 
-      <View>
-        <TouchableOpacity onPress={this.handleLaunchCamera.bind(this)} style={styles.button}>
-          <Text style={styles.text}>拍照</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.handleOpenImagePicker.bind(this)} style={styles.button}>
-          <Text style={styles.text}>开启压缩</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.handleDeleteCache.bind(this)} style={styles.button}>
-          <Text style={styles.text}>缓存清除</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.handleOpenVideoPicker.bind(this)} style={styles.button}>
-          <Text style={styles.text}>选择视频</Text>
-        </TouchableOpacity>
-      </View>
     </View>;
   }
 
-
-  handleOpenImagePicker = () => {
-
-    ImagePicker.openPicker({
-      maxSize:1,
-      isRecordSelected: true,
-      cropping: true,
-      showCropCircle: true,
-      compressQuality: 90,
-      compress: true,
-      includeBase64: false,
-    }).then(images => {
-      this.setState({
-        images: images.map(i => {
-          console.log('received image', i);
-          return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
-        }),
-      });
-    }).catch(e => {
-      console.log(e.code);
-      alert(e);
-    });
-  };
-
-
-  handleLaunchCamera = async () => {
-    //await this.requestPermission();
-    ImagePicker.openCamera({isCrop: true, showCropCircle: true, showCropFrame: false})
-        .then(images => {
-          this.setState({
-            images: images.map(i => {
-              console.log('received image', i);
-              return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
-            }),
-          });
-        }).catch(e => {
-      console.log(e.code);
-      alert(e);
-    });
-  };
-
-  handleDeleteCache = () => {
-    ImagePicker.deleteCache();
-  };
-
-  handleOpenVideoPicker = () => {
-    ImagePicker.openVideoPicker({allowPickingMultipleVideo: true})
-        .then(images => {
-          this.setState({
-            images: images.map(i => {
-              console.log('received image', i);
-              return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
-            }),
-          });
-        }).catch(e => {
-      console.log(e.code);
-      alert(e);
-    });
-  };
 
 }
