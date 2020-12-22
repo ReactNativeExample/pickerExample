@@ -48,7 +48,7 @@ export default class App extends Component {
           return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
         }),
       });
-    }).catch(e => alert(e));
+    }).catch(e => alert(e.code));
   }
 
   pickSingle(cropit) {
@@ -68,7 +68,7 @@ export default class App extends Component {
       });
     }).catch(e => {
       console.log(e.code);
-      alert(e);
+      alert(e.code);
     });
   }
 
@@ -90,7 +90,7 @@ export default class App extends Component {
       });
     }).catch(e => {
       console.log(e.code);
-      alert(e);
+      alert(e.code);
     });
   }
 
@@ -111,7 +111,7 @@ export default class App extends Component {
       });
     }).catch(e => {
       console.log(e.code);
-      alert(e);
+      alert(e.code);
     });
   }
 
@@ -129,7 +129,7 @@ export default class App extends Component {
       });
     }).catch(e => {
       console.log(e.code);
-      alert(e);
+      alert(e.code);
     });
   }
 
@@ -144,7 +144,7 @@ export default class App extends Component {
           return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
         }),
       });
-    }).catch(e => alert(e));
+    }).catch(e => alert(e.code));
   }
 
   scaledHeight(oldW, oldH, newW) {
